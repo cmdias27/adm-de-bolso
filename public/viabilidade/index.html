@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste de Viabilidade: O Rascunho do Futuro | Adm de Bolso</title>
+    <style>
+        /* Reutilizamos o estilo limpo e profissional */
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; color: #333; line-height: 1.6; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: #fff; padding: 40px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.08); }
+        h2 { color: #d35400; text-align: center; margin-bottom: 10px; }
+        .subtitle { text-align: center; color: #7f8c8d; margin-bottom: 30px; font-size: 0.95em; }
+        .form-section { background: #fafbfc; border: 1px solid #e1e4e8; padding: 25px; margin-bottom: 25px; border-radius: 8px; border-left: 5px solid #d35400; }
+        .form-section h3 { margin-top: 0; color: #d35400; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        label { font-weight: bold; display: block; margin-top: 15px; color: #2c3e50; font-size: 0.95em; }
+        .help-text { display: block; font-size: 0.85em; color: #7f8c8d; margin-bottom: 8px; font-style: italic; }
+        input, select, textarea { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 1em; }
+        input:focus, select:focus, textarea:focus { border-color: #e67e22; outline: none; box-shadow: 0 0 5px rgba(230,126,34,0.3); }
+        button { width: 100%; padding: 18px; background-color: #d35400; color: white; border: none; border-radius: 6px; font-size: 1.1em; font-weight: bold; cursor: pointer; margin-top: 20px; transition: 0.3s; }
+        button:hover { background-color: #e67e22; }
+        #resultado { margin-top: 40px; padding: 25px; background: #fdf3e7; border-radius: 8px; display: none; border-left: 5px solid #d35400; }
+        
+        /* O Botão de Chamar Consultor e o Chat */
+        #btnChamarConsultor { background-color: #2c3e50; margin-top: 15px; }
+        #btnChamarConsultor:hover { background-color: #1a252f; }
+        #chatInterface { display: none; margin-top: 20px; border: 1px solid #ddd; border-radius: 8px; overflow: hidden; }
+        .chat-header { background-color: #2c3e50; color: white; padding: 15px; text-align: center; }
+        .chat-header h3 { margin: 0; font-size: 1.2em; }
+        .chat-header p { margin: 5px 0 0 0; font-size: 0.85em; color: #f39c12; }
+        .chat-box { height: 400px; overflow-y: auto; padding: 20px; background-color: #f9f9f9; display: flex; flex-direction: column; gap: 15px; }
+        .msg { max-width: 80%; padding: 12px 16px; border-radius: 8px; line-height: 1.4; font-size: 0.95em; }
+        .msg-system { background-color: #fff3e0; border-left: 4px solid #f39c12; align-self: flex-start; width: 100%; font-size: 0.9em; }
+        .msg-consultant { background-color: #fff; border: 1px solid #ddd; align-self: flex-start; border-bottom-left-radius: 0; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+        .msg-user { background-color: #daf8e3; color: #0f5132; align-self: flex-end; border-bottom-right-radius: 0; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+        .chat-input-area { display: flex; padding: 15px; background-color: #fff; border-top: 1px solid #ddd; }
+        .chat-input-area input { flex-grow: 1; margin: 0; border-radius: 4px 0 0 4px; border-right: none; }
+        .chat-input-area button { width: auto; margin: 0; border-radius: 0 4px 4px 0; padding: 0 25px; background-color: #d35400; }
+        .chat-input-area button:hover { background-color: #e67e22; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div id="areaFormulario">
+        <h2>Teste de Viabilidade: O Rascunho do Futuro</h2>
+        <p class="subtitle">Como o negócio ainda não existe, trabalharemos com estimativas. É melhor um número estimado do que nenhum.</p>
+
+        <form id="viabilidadeForm">
+            <div class="form-section">
+                <h3>0. Seus Contatos (Para enviarmos o laudo)</h3>
+                <label for="nomeCliente">Qual o seu nome?</label>
+                <input type="text" id="nomeCliente" required placeholder="Ex: João da Silva">
+
+                <label for="whatsappCliente">Seu WhatsApp:</label>
+                <input type="text" id="whatsappCliente" required placeholder="Ex: 11 99999-9999">
+            </div>
+            
+            <div class="form-section">
+                <h3>1. A Ideia e o Limite</h3>
+                <label for="modeloNegocio">Qual é o modelo de negócio que você quer abrir?</label>
+                <textarea id="modeloNegocio" rows="2" required placeholder="Ex: Hambúrgueria Delivery na minha cidade..."></textarea>
+                
+                <label for="localizacao">Onde o negócio vai funcionar?</label>
+                <select id="localizacao" required>
+                    <option value="">Selecione...</option>
+                    <option value="Rua">Ponto Comercial de Rua (Aluguel caro, visibilidade alta)</option>
+                    <option value="Shopping">Ponto em Shopping/Galeria</option>
+                    <option value="Sala">Sala Comercial / Escritório</option>
+                    <option value="Casa">Home Office / Dentro de casa</option>
+                    <option value="Digital">Apenas Digital (E-commerce)</option>
+                </select>
+
+                <label for="capitalTotal">Qual é o seu TETO de investimento (R$)?</label>
+                <span class="help-text">O limite financeiro real que você tem no bolso ou aprovado hoje.</span>
+                <input type="number" id="capitalTotal" required placeholder="Ex: 80000">
+
+                <label for="dependenciaRenda">Você depende desse negócio para pagar contas pessoais logo no 1º mês?</label>
+                <select id="dependenciaRenda" required>
+                    <option value="">Selecione...</option>
+                    <option value="Sim">Sim, preciso tirar salário urgente.</option>
+                    <option value="Reserva 3m">Não, tenho reserva para uns 3 a 6 meses.</option>
+                    <option value="Outra Renda">Não, tenho outra fonte de renda fixa (emprego, cônjuge).</option>
+                </select>
+                
+                <label for="fonteInvestimento">Qual a fonte do investimento inicial?</label>
+                <select id="fonteInvestimento" required>
+                    <option value="">Selecione...</option>
+                    <option value="Bancario">Empréstimo Bancário</option>
+                    <option value="Proprio">Patrimônio Próprio (Poupança/Rescisão)</option>
+                    <option value="Terceiros">Empréstimo com Terceiros</option>
+                    <option value="Misto">Parte Empréstimo e Parte Próprio</option>
+                </select>
+            </div>
+
+            <div class="form-section">
+                <h3>2. O Investimento Inicial (Capex)</h3>
+                <label for="custoReforma">Ponto Comercial (Reforma/Adequação) (R$):</label>
+                <span class="help-text">Se for online, inclua a criação da loja virtual/site.</span>
+                <input type="number" id="custoReforma" required placeholder="Ex: 15000">
+
+                <label for="custoEquipamentos">Equipamentos e Mobiliário (R$):</label>
+                <span class="help-text">Computadores, maquinário, fogões, móveis, etc.</span>
+                <input type="number" id="custoEquipamentos" required placeholder="Ex: 30000">
+
+                <label for="custoBurocracia">Burocracia, Marketing Inicial e Abertura (R$):</label>
+                <span class="help-text">Contador, taxas, licenças.</span>
+                <input type="number" id="custoBurocracia" required placeholder="Ex: 5000">
+                
+                <label for="estoqueInicial">Estoque Inicial (R$):</label>
+                <span class="help-text">Para abrir no dia 1, quanto gastará com mercadorias e insumos?</span>
+                <input type="number" id="estoqueInicial" required placeholder="Ex: 8000">
+            </div>
+
+            <div class="form-section">
+                <h3>3. A Estrutura Mensal (Opex)</h3>
+                <label for="custoAluguel">Aluguel + Condomínio + IPTU (R$):</label>
+                <input type="number" id="custoAluguel" required placeholder="Ex: 3500">
+
+                <label for="custoEquipe">Equipe (Sem você) (R$):</label>
+                <span class="help-text">Total de salários + benefícios esperados por mês.</span>
+                <input type="number" id="custoEquipe" required placeholder="Ex: 4000">
+
+                <label for="despesasBasicas">Despesas Básicas Mensais (R$):</label>
+                <span class="help-text">Luz, Água, Internet, Contador, Marketing fixo.</span>
+                <input type="number" id="despesasBasicas" required placeholder="Ex: 2000">
+
+                <label for="proLabore">Pró-labore Desejado (Seu Salário) (R$):</label>
+                <input type="number" id="proLabore" required placeholder="Ex: 5000">
+            </div>
+
+            <div class="form-section">
+                <h3>4. O Produto e o Mercado</h3>
+                <label for="produtoPrincipal">Qual será o seu "Carro-Chefe"?</label>
+                <span class="help-text">Escolha um item principal para usarmos de base.</span>
+                <input type="text" id="produtoPrincipal" required placeholder="Ex: Pizza Calabresa">
+
+                <label for="precoVenda">Por quanto pretende VENDER esse item (R$)?</label>
+                <input type="number" step="0.1" id="precoVenda" required placeholder="Ex: 45.00">
+
+                <label for="custoVariavel">Custo do Produto (Produção/Revenda + Impostos/Taxas) (R$):</label>
+                <span class="help-text">Some o ingrediente, embalagem e taxa do cartão.</span>
+                <input type="number" step="0.1" id="custoVariavel" required placeholder="Ex: 22.00">
+
+                <label for="vendasPorDia">Aposta de Venda: Quantas unidades acha REALISTA vender POR DIA no 1º mês?</label>
+                <input type="number" id="vendasPorDia" required placeholder="Ex: 15">
+            </div>
+
+            <button type="submit" id="btnAnalisar">Rodar o Simulador de Viabilidade</button>
+        </form>
+
+        <div id="resultado">
+            <h3 style="color:#d35400; margin-top:0;">Leitura da Inteligência Artificial</h3>
+            <div id="textoResultado">Montando projeção de fluxo de caixa...</div>
+        </div>
+    </div>
+
+    <div id="chatInterface">
+        <div class="chat-header">
+            <h3>💬 Sala de Viabilidade</h3>
+            <p>Conectado com o Consultor Especialista</p>
+        </div>
+        <div id="chatMessages" class="chat-box"></div>
+        <div class="chat-input-area">
+            <input type="text" id="userInput" placeholder="Digite sua dúvida ou simulação...">
+            <button id="btnEnviarMsg">Enviar</button>
+        </div>
+    </div>
+
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
