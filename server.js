@@ -65,18 +65,21 @@ app.post('/api/consultoria', async (req, res) => {
 
         console.log(`Recebendo dados completos de: ${dadosCliente.nome}`);
 
-        // SALVANDO TODOS OS DADOS NO FIREBASE (Antes da IA responder)
+// SALVANDO TODOS OS DADOS NO FIREBASE (Antes da IA responder)
         try {
             await db.collection('leads_viabilidade').add({
                 // Informações de Contato
                 nome: dadosCliente.nome,
                 whatsapp: dadosCliente.whatsapp,
                 
-                // Dados do Negócio (Qualitativos)
+                // NOVO: Geopolítica e Nicho
                 projeto: dadosCliente.projeto,
+                ramo: dadosCliente.ramo,
+                cidade: dadosCliente.cidade,
+                estado: dadosCliente.estado,
+                bairro: dadosCliente.bairro,
                 localizacao: dadosCliente.localizacao,
                 dependenciaRenda: dadosCliente.dependenciaRenda,
-                fonteInvestimento: dadosCliente.fonteInvestimento,
                 
                 // Financeiro (Capex - Investimento Inicial)
                 capitalTotal: dadosCliente.capitalTotal,
@@ -101,10 +104,10 @@ app.post('/api/consultoria', async (req, res) => {
                 resultadoSistema: dadosCliente.resultadoStatus,
                 pontoEquilibrioDiario: dadosCliente.pontoEquilibrioDiario,
                 
-                // Timestamp oficial do servidor
                 dataRegistro: admin.firestore.FieldValue.serverTimestamp()
             });
             console.log("✅ Dados completos salvos no Firebase com sucesso!");
+            
         } catch (dbError) {
             console.error("Erro ao salvar no Firebase:", dbError);
             // O sistema continua mesmo se o banco falhar, para não travar a experiência do usuário

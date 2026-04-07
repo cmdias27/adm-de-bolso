@@ -1,127 +1,94 @@
 document.getElementById('viabilidadeForm').addEventListener('submit', async function(e) {
     e.preventDefault();
 
-    // ==========================================
-    // 1. CAPTURA DOS DADOS DO CLIENTE (FIREBASE)
-    // ==========================================
+    // 1. Contato
     const nomeCliente = document.getElementById('nomeCliente').value;
     const whatsappCliente = document.getElementById('whatsappCliente').value;
 
-    // ==========================================
-    // 2. DADOS DO PROJETO E QUALITATIVOS
-    // ==========================================
+    // 2. Projeto e Localização
     const modeloNegocio = document.getElementById('modeloNegocio').value;
+    const ramoAtuacao = document.getElementById('ramoAtuacao').value;
+    const cidade = document.getElementById('cidade').value;
+    const estado = document.getElementById('estado').value;
+    const bairro = document.getElementById('bairro').value;
     const localizacao = document.getElementById('localizacao').value;
     const dependenciaRenda = document.getElementById('dependenciaRenda').value;
-    const fonteInvestimento = document.getElementById('fonteInvestimento').value;
-    const produtoPrincipal = document.getElementById('produtoPrincipal').value;
 
-    // 3. Dados de Investimento (Capex)
+    // 3. Capex (Abertura)
     const capitalTotal = parseFloat(document.getElementById('capitalTotal').value);
     const custoReforma = parseFloat(document.getElementById('custoReforma').value);
     const custoEquipamentos = parseFloat(document.getElementById('custoEquipamentos').value);
-    const custoBurocracia = parseFloat(document.getElementById('custoBurocracia').value);
     const estoqueInicial = parseFloat(document.getElementById('estoqueInicial').value);
+    const custoBurocracia = parseFloat(document.getElementById('custoBurocracia').value);
 
-    // 4. Custos Fixos (Opex)
+    // 4. Opex (Custo Fixo)
     const custoAluguel = parseFloat(document.getElementById('custoAluguel').value);
     const custoEquipe = parseFloat(document.getElementById('custoEquipe').value);
     const despesasBasicas = parseFloat(document.getElementById('despesasBasicas').value);
     const proLabore = parseFloat(document.getElementById('proLabore').value);
 
     // 5. Receitas
+    const produtoPrincipal = document.getElementById('produtoPrincipal').value;
     const precoVenda = parseFloat(document.getElementById('precoVenda').value);
     const custoVariavel = parseFloat(document.getElementById('custoVariavel').value);
     const vendasPorDia = parseInt(document.getElementById('vendasPorDia').value);
 
-    // ==========================================
-    // 6. A MATEMÁTICA PURA E LÓGICA DE DECISÃO
-    // ==========================================
+    // 6. Matemática
     const totalAbertura = custoReforma + custoEquipamentos + custoBurocracia + estoqueInicial;
     const capitalGiro = capitalTotal - totalAbertura;
     const custoFixoTotal = custoAluguel + custoEquipe + despesasBasicas + proLabore;
     const margemUnitaria = precoVenda - custoVariavel;
     
     const pontoEquilibrioMensal = custoFixoTotal / margemUnitaria;
-    const pontoEquilibrioDiario = Math.ceil(pontoEquilibrioMensal / 30); // Arredonda sempre pra cima
+    const pontoEquilibrioDiario = Math.ceil(pontoEquilibrioMensal / 30);
 
     const vendasMensaisAposta = vendasPorDia * 30;
     const lucroOperacionalMes1 = (vendasMensaisAposta * margemUnitaria) - custoFixoTotal;
 
-    // A JOGADA DE MESTRE: Decidimos a lógica AQUI no código, não na IA.
     const capitalGiroPositivo = capitalGiro >= 0;
     const bateuAMeta = vendasPorDia >= pontoEquilibrioDiario;
 
-    // Tela de Carregamento
     const divResultado = document.getElementById('resultado');
     const textoResultado = document.getElementById('textoResultado');
+    const btnAnalisar = document.getElementById('btnAnalisar');
+
     divResultado.style.display = 'block';
     textoResultado.innerHTML = "<p><i>Simulando fluxo de caixa e projetando sobrevivência...</i></p>";
+    btnAnalisar.disabled = true;
+    btnAnalisar.innerText = "Processando Dados...";
 
-    // ==========================================
-    // 7. O PROMPT BLINDADO E HUMANIZADO
-    // ==========================================
+    // 7. Prompt
     const promptConsultoria = `
-        Atue como um Consultor de Negócios experiente, direto e muito humano do 'Adm de Bolso'. O cliente quer abrir o seguinte negócio: "${modeloNegocio}".
+        Atue como Consultor Estratégico do 'Adm de Bolso'. O cliente quer abrir o negócio: "${modeloNegocio}" (Ramo: ${ramoAtuacao}) na cidade de ${cidade}-${estado}, bairro ${bairro}.
 
-        Eu já fiz a matemática e você NÃO PODE errar estes fatos. Aqui está a VERDADE ABSOLUTA:
-        - Fôlego de Caixa: R$ ${capitalGiro.toFixed(2)} (Está ${capitalGiroPositivo ? 'positivo' : 'NEGATIVO'}).
-        - Ponto de Equilíbrio: A empresa TEM QUE vender ${pontoEquilibrioDiario} itens por dia para empatar as contas (pagar Custo Fixo de R$ ${custoFixoTotal}).
-        - Aposta do Cliente: Ele apostou que vai vender ${vendasPorDia} itens por dia.
-        - Resultado da Simulação: ${bateuAMeta ? `ELE BATEU A META! A aposta dele gera um Lucro de R$ ${lucroOperacionalMes1.toFixed(2)} no mês.` : `PREJUÍZO! A aposta dele não alcança a meta e vai gerar um buraco de R$ ${lucroOperacionalMes1.toFixed(2)} no mês.`}
-        - Depende dessa renda no mês 1? ${dependenciaRenda}.
+        Fatos matemáticos cruciais:
+        - Fôlego de Caixa (Capital de Giro): R$ ${capitalGiro.toFixed(2)} (${capitalGiroPositivo ? 'Positivo' : 'NEGATIVO'}).
+        - Ponto de Equilíbrio: Precisa de ${pontoEquilibrioDiario} vendas/atendimentos por dia para pagar os custos de R$ ${custoFixoTotal}.
+        - Aposta: Ele projetou ${vendasPorDia} por dia.
+        - Lucro Projetado: R$ ${lucroOperacionalMes1.toFixed(2)} (${bateuAMeta ? 'Lucro' : 'PREJUÍZO'}).
 
-        Sua missão: Escreva um 'Parecer de Viabilidade' em 3 a 4 parágrafos, como se estivesse conversando com o cliente na mesa. 
-        REGRAS DO PARECER:
-        1. Comece dando o veredito direto sobre o Capital de Giro. Se estiver negativo, diga que o projeto morre antes de abrir as portas.
-        2. Fale sobre a meta de ${pontoEquilibrioDiario} vendas diárias vs a aposta dele de ${vendasPorDia}. 
-        3. ${bateuAMeta ? `Como a simulação DEU LUCRO, parabenize-o pelos números. Mas traga-o para a realidade: pergunte se é realmente fácil vender ${vendasPorDia} itens logo no primeiro mês, sem ter marca conhecida.` : `Como a simulação DEU PREJUÍZO, dê o alerta vermelho. Se ele disse que 'precisa do dinheiro urgente' (${dependenciaRenda}), alerte que ele vai passar necessidade financeira se não cortar custos imediatamente.`}
-        4. O tom deve ser conselheiro, sem jargões como "Opex" ou "Capex". Use "Despesas", "Custo para abrir", "Gordura financeira".
-        5. Formate em HTML básico (use <p>, <b>). NÃO use formatação markdown de código.
+        Sua missão em 3 parágrafos:
+        1. Avalie rapidamente o Capital de Giro e se ele será suficiente para a abertura.
+        2. Analise a meta diária (${pontoEquilibrioDiario}) vs a projeção dele (${vendasPorDia}). Diga se é realista para um negócio novo.
+        3. Encerre dizendo que a análise matemática foi feita e que o próximo passo é montar um 'Plano de Negócios Validado' com o consultor humano, mapeando concorrentes e estratégias para a região de ${cidade}.
+        Seja encorajador, mas muito realista com os riscos. Use formatação HTML básica (<p>, <b>).
     `;
 
-// ==========================================
-    // 8. O PAYLOAD COMPLETO (DADOS ENVIADOS AO SERVIDOR)
-    // ==========================================
     const payload = {
         prompt: promptConsultoria,
         dadosCliente: {
-            // Contato
-            nome: nomeCliente,
-            whatsapp: whatsappCliente,
-            
-            // Qualitativo
-            projeto: modeloNegocio,
-            localizacao: localizacao,
-            dependenciaRenda: dependenciaRenda,
-            fonteInvestimento: fonteInvestimento,
-            
-            // Financeiro
-            capitalTotal: capitalTotal,
-            custoReforma: custoReforma,
-            custoEquipamentos: custoEquipamentos,
-            custoBurocracia: custoBurocracia,
-            estoqueInicial: estoqueInicial,
-            custoAluguel: custoAluguel,
-            custoEquipe: custoEquipe,
-            despesasBasicas: despesasBasicas,
-            proLabore: proLabore,
-            
-            // Mercado
-            produtoPrincipal: produtoPrincipal,
-            precoVenda: precoVenda,
-            custoVariavel: custoVariavel,
-            vendasPorDia: vendasPorDia,
-            
-            // Resultados Calculados
-            resultadoStatus: bateuAMeta ? 'Viável' : 'Risco de Prejuízo',
-            pontoEquilibrioDiario: pontoEquilibrioDiario
+            nome: nomeCliente, whatsapp: whatsappCliente,
+            projeto: modeloNegocio, ramo: ramoAtuacao,
+            cidade: cidade, estado: estado, bairro: bairro,
+            localizacao: localizacao, dependenciaRenda: dependenciaRenda,
+            capitalTotal: capitalTotal, custoReforma: custoReforma,
+            custoEquipamentos: custoEquipamentos, custoBurocracia: custoBurocracia, estoqueInicial: estoqueInicial,
+            custoAluguel: custoAluguel, custoEquipe: custoEquipe, despesasBasicas: despesasBasicas, proLabore: proLabore,
+            produtoPrincipal: produtoPrincipal, precoVenda: precoVenda, custoVariavel: custoVariavel, vendasPorDia: vendasPorDia,
+            resultadoStatus: bateuAMeta ? 'Viável' : 'Risco', pontoEquilibrioDiario: pontoEquilibrioDiario
         }
     };
 
-    // ==========================================
-    // 9. COMUNICAÇÃO COM O BACKEND (NODE.JS)
-    // ==========================================
     try {
         const resposta = await fetch('/api/consultoria', {
             method: 'POST',
@@ -133,71 +100,31 @@ document.getElementById('viabilidadeForm').addEventListener('submit', async func
         if (resposta.ok) {
             let htmlLimpo = dados.relatorio.replace(/```html/g, '').replace(/```/g, '');
             
+            // LINK DO WHATSAPP AQUI: Altere o número abaixo para o seu!
+            const numeroWhatsAppConsultor = "5561981420220"; 
+            const mensagemPronta = `Olá! Meu nome é ${nomeCliente}. Acabei de rodar o Simulador do Adm de Bolso para o meu projeto de ${modeloNegocio} e o sistema me recomendou falar com o consultor para montar o Plano de Negócios.`;
+            const linkWhatsApp = `https://wa.me/${numeroWhatsAppConsultor}?text=${encodeURIComponent(mensagemPronta)}`;
+
             textoResultado.innerHTML = `
                 <div style="background-color: #fff; padding: 15px; border-radius: 5px; border: 1px solid #ddd; margin-bottom: 20px;">
-                    <strong>Seu Painel de Viabilidade:</strong><br>
-                    <span style="color: ${capitalGiroPositivo ? 'green' : 'red'};">Capital de Giro (Sobra): R$ ${capitalGiro.toFixed(2)}</span><br>
-                    Meta de Sobrevivência: Vender <b>${pontoEquilibrioDiario} itens</b> por dia.<br>
-                    Sua Aposta: Vender <b>${vendasPorDia} itens</b> por dia.<br>
-                    Status da Simulação: <strong style="color: ${bateuAMeta ? 'green' : 'red'};">${bateuAMeta ? 'VIÁVEL (NO PAPEL)' : 'ALTO RISCO DE PREJUÍZO'}</strong>
+                    <strong>Raio-X Inicial:</strong><br>
+                    <span style="color: ${capitalGiroPositivo ? 'green' : 'red'};">Capital de Giro: R$ ${capitalGiro.toFixed(2)}</span><br>
+                    Meta Mínima: <b>${pontoEquilibrioDiario} vendas/dia</b>.<br>
+                    Status Prévio: <strong style="color: ${bateuAMeta ? 'green' : 'red'};">${bateuAMeta ? 'VIÁVEL (No Papel)' : 'ALTO RISCO DE PREJUÍZO'}</strong>
                 </div>
                 ${htmlLimpo}
-                <button id="btnChamarConsultor">💬 Revisar números com o Consultor</button>
+                
+                <a href="${linkWhatsApp}" target="_blank" style="display: block; text-align: center; text-decoration: none; width: 100%; padding: 18px; background-color: #25D366; color: white; border-radius: 6px; font-size: 1.1em; font-weight: bold; margin-top: 20px; transition: 0.3s; box-shadow: 0 4px 6px rgba(37, 211, 102, 0.3);">
+                    <i class="bi bi-whatsapp"></i> Falar com o Consultor no WhatsApp
+                </a>
             `;
-            document.getElementById('btnChamarConsultor').addEventListener('click', () => iniciarChat(htmlLimpo));
         } else {
-            textoResultado.innerHTML = `<p style="color: red;">Erro no servidor.</p>`;
+            textoResultado.innerHTML = `<p style="color: red;">Erro no servidor. Tente novamente mais tarde.</p>`;
         }
     } catch (erro) {
-        console.error(erro);
-        textoResultado.innerHTML = `<p style="color: red;">Falha ao conectar com a IA.</p>`;
+        textoResultado.innerHTML = `<p style="color: red;">Falha de conexão com a Inteligência Artificial.</p>`;
+    } finally {
+        btnAnalisar.disabled = false;
+        btnAnalisar.innerText = "Gerar Simulação e Solicitar Plano";
     }
 });
-
-// ==========================================
-// 10. LÓGICA DE HANDOFF (TRANSIÇÃO PARA CHAT)
-// ==========================================
-function iniciarChat(relatorioIA) {
-    document.getElementById('areaFormulario').style.display = 'none';
-    document.getElementById('chatInterface').style.display = 'block';
-    
-    const chatBox = document.getElementById('chatMessages');
-    chatBox.innerHTML += `
-        <div class="msg msg-system">
-            <strong>🤖 Resumo da IA:</strong><br>
-            Aviso de simulação enviado ao consultor.
-        </div>
-    `;
-
-    setTimeout(() => {
-        chatBox.innerHTML += `
-            <div class="msg msg-consultant">
-                <strong>👨‍💼 Consultor Adm de Bolso:</strong><br>
-                Olá, futuro empreendedor. Vi o diagnóstico da sua simulação.<br><br>
-                Papel aceita tudo, mas o mercado real é um pouco mais duro. A nossa máquina cruzou seus custos operacionais. Por onde você quer começar a mexer na sua estratégia para garantirmos que essa ideia dê certo logo no dia 1?
-            </div>
-        `;
-        chatBox.scrollTop = chatBox.scrollHeight;
-    }, 2000);
-}
-
-// Envio de mensagens no Chat
-document.getElementById('btnEnviarMsg').addEventListener('click', enviarMensagemUsuario);
-document.getElementById('userInput').addEventListener('keypress', function (e) {
-    if (e.key === 'Enter') enviarMensagemUsuario();
-});
-
-function enviarMensagemUsuario() {
-    const input = document.getElementById('userInput');
-    const texto = input.value.trim();
-    if (texto !== '') {
-        const chatBox = document.getElementById('chatMessages');
-        chatBox.innerHTML += `<div class="msg msg-user">${texto}</div>`;
-        input.value = '';
-        chatBox.scrollTop = chatBox.scrollHeight;
-        setTimeout(() => {
-            chatBox.innerHTML += `<div class="msg msg-consultant"><em>(Consultor avaliando cenário...)</em></div>`;
-            chatBox.scrollTop = chatBox.scrollHeight;
-        }, 1500);
-    }
-}
