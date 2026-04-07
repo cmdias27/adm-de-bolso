@@ -101,7 +101,7 @@ document.getElementById('viabilidadeForm').addEventListener('submit', async func
             let htmlLimpo = dados.relatorio.replace(/```html/g, '').replace(/```/g, '');
             
             // LINK DO WHATSAPP AQUI: Altere o número abaixo para o seu!
-            const numeroWhatsAppConsultor = "5561981420220"; 
+            const numeroWhatsAppConsultor = "5561991392337"; 
             const mensagemPronta = `Olá! Meu nome é ${nomeCliente}. Acabei de rodar o Simulador do Adm de Bolso para o meu projeto de ${modeloNegocio} e o sistema me recomendou falar com o consultor para montar o Plano de Negócios.`;
             const linkWhatsApp = `https://wa.me/${numeroWhatsAppConsultor}?text=${encodeURIComponent(mensagemPronta)}`;
 
